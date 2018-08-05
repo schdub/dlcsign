@@ -82,7 +82,6 @@ bool dlc_verify(
     }
     if (!dsa) return false;
 
-
     unsigned char IndexFileCRC_sha1hash[20];
     SHA1((unsigned char*)IndexFileCRC.c_str(), IndexFileCRC.size(), IndexFileCRC_sha1hash);
 
@@ -102,7 +101,7 @@ bool dlc_sign(
         std::vector<unsigned char> priv_key;
         readFile(priv_key, "priv.key");
         const unsigned char *p = priv_key.data();
-        d2i_DSA_PUBKEY(&dsa, &p, priv_key.size());
+        d2i_DSAPrivateKey(&dsa, &p, priv_key.size());
     }
     if (!dsa) return false;
 
