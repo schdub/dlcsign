@@ -119,15 +119,34 @@ bool dlc_sign(
     }
 }
 
-int main() {
-    bool do_verify = true;
-    std::string crc = "1148974934";
-    std::string sign = "302c021425c3541a544de7d056b0b677810bb54d45b831ab021443163ffd73c4c34f0f2d5c7bc1778711d3a3abd4";
+int main(int argc, char ** argv) {
+    bool show_usage = true;
+    bool do_verify = false;
+
+    const char * pCRC = NULL;
+    if (argc > 1) {
+        pCRC = argv[1];
+        show_usage = false;
+    }
+    const char * pSIGN = NULL;
+    if (argc > 2) {
+        pSIGN = argv[2];
+        do_verify = true;
+    }
+
+    if (show_usage) {
+        std::cout << "USAGE:\n    " << argv[0] << " crc signature\nEXAMPLE:\n"
+        << "    dlcsign 1148974934 302c021425c3541a544de7d056b0b677810bb54d45b"
+           "831ab021443163ffd73c4c34f0f2d5c7bc1778711d3a3abd4\n";
+        return EXIT_SUCCESS;
+    }
+
     if (do_verify) {
-        std::cout << (dlc_verify(crc, sign) ? ""  : "NOT " ) << "verified" << std::endl;
+        std::cout << (dlc_verify(pCRC, pSIGN) ? ""  : "NOT " ) << "verified" << std::endl;
     } else {
-        if (dlc_sign(crc, sign)) {
-            std::cout << sign << " for " << crc << std::endl;
+        std::string sign;
+        if (dlc_sign(pCRC, sign)) {
+            std::cout << sign << std::endl;
         }
     }
 }
